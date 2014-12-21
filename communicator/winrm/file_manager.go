@@ -96,7 +96,7 @@ func (f *fileManager) UploadFile(dst string, src *os.File, server *http.Server) 
 	log.Printf("Uploading \"%s\"with the HTTP Server on ip %s and port %s with path %s", src.Name(), f.webServerIpAddress, port, winDest)
 	//downloadCommand := fmt.Sprintf("powershell -Command \"iex ((new-object net.webclient).DownloadFile('http://%s:%d/%s', '%s'))\"", ipAddress, httpPort, path.Base(tmp.Name()), winDest)
 	//downloadCommand := fmt.Sprintf("powershell \"iex ((new-object net.webclient).DownloadFile('http://%s:%d/%s', '%s'))\"", ipAddress, httpPort, path.Base(tmp.Name()), winDest)
-	downloadCommand := fmt.Sprintf("powershell Invoke-WebRequest 'http://%s:%s/%s' -OutFile %s", f.webServerIpAddress, port, path.Base(src.Name()), winDest)
+	downloadCommand := fmt.Sprintf(`powershell $Client = New-Object System.Net.Webclient; $Client.DownloadFile('http://%s:%s/%s', '%s')`, f.webServerIpAddress, port, path.Base(src.Name()), winDest)
 	log.Printf("Executing download command: %s", downloadCommand)
 
 	err := f.runCommand(downloadCommand)
